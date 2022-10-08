@@ -5,14 +5,18 @@ const guia = require("../models/guia");
 const remitente = require("../models/remitente");
 
 const uniqid = require("uniqid");
+let theRemitente;
 
-const pedidoPost = async (req, res = response) => {
-  const theRemitente = await remitente.findAll({
+const getRemitente = async () => {
+  theRemitente = await remitente.findAll({
     where: {
       id: 1,
     },
   });
+};
+getRemitente();
 
+const pedidoPost = async (req, res = response) => {
   const uniqueID = uniqid();
 
   req.body.editadopor = "cliente";
@@ -33,27 +37,27 @@ const pedidoPost = async (req, res = response) => {
     estado: req.body.estadopedido,
     pedidoID: uniqueID,
   };
-  const bodyGuia = {
-    destinatarionombre: req.body.nombre,
-    destinatariocedula: req.body.cedula,
-    destinatariotelefono: req.body.telefono,
-    destinatariodireccion: `${req.body.departamento} ${req.body.ciudad} ${req.body.direccion} `,
-    nombreremitente: theRemitente[0].nombre,
-    cedularemitente: theRemitente[0].cedula,
-    telefonoremitente: theRemitente[0].telefono,
-    ciudadremitente: "Cúcuta",
-    direccionremitente: theRemitente[0].direccion,
-    pedidoID: uniqueID,
-  };
+  // const bodyGuia = {
+  //   destinatarionombre: req.body.nombre,
+  //   destinatariocedula: req.body.cedula,
+  //   destinatariotelefono: req.body.telefono,
+  //   destinatariodireccion: `${req.body.departamento} ${req.body.ciudad} ${req.body.direccion} `,
+  //   nombreremitente: theRemitente[0].nombre,
+  //   cedularemitente: theRemitente[0].cedula,
+  //   telefonoremitente: theRemitente[0].telefono,
+  //   ciudadremitente: "Cúcuta",
+  //   direccionremitente: theRemitente[0].direccion,
+  //   pedidoID: uniqueID,
+  // };
 
   const body = req.body;
   try {
     pedido.create(body);
     factura.create(bodyFactura);
-    guia.create(bodyGuia);
+    // guia.create(bodyGuia);
     return res.status(201).json({
       msg: "pedido creado exitosamente",
-      uniqueID
+      uniqueID,
     });
   } catch (error) {
     return res.status(400).json({
@@ -78,7 +82,7 @@ const pedidoGet = async (req, res = response) => {
 const pedidoGetid = async (req, res = response) => {
   const id = req.params.id;
 
-  const pedidoAll = await pedido.findAll({ where: { id }} );
+  const pedidoAll = await pedido.findAll({ where: { id } });
   res.json({
     estado: pedidoAll[0].estadopedido,
     id: pedidoAll[0].id,
@@ -90,9 +94,49 @@ const pedidoPut = async (req, res = response) => {
   req.body.editadopor = req.user.email;
   const body = req.body;
 
+  const bodyFactura = {
+    nombrecliente: req.body.nombre,
+    cedula: req.body.cedula,
+    telefono: req.body.telefono,
+    email: req.body.email,
+    departamento: req.body.departamento,
+    ciudad: req.body.ciudad,
+    direccion: req.body.direccion,
+    total: req.body.total,
+    estado: req.body.estadopedido,
+    pedidoID: req.body.id,
+  };
+
+  const bodyGuia = {
+    destinatarionombre: req.body.nombre,
+    destinatariocedula: req.body.cedula,
+    destinatariotelefono: req.body.telefono,
+    destinatariodireccion: `${req.body.departamento} ${req.body.ciudad} ${req.body.direccion} `,
+    nombreremitente: theRemitente[0].nombre,
+    cedularemitente: theRemitente[0].cedula,
+    telefonoremitente: theRemitente[0].telefono,
+    ciudadremitente: "Cúcuta",
+    direccionremitente: theRemitente[0].direccion,
+    pedidoID: req.body.id,
+  };
+
   try {
+    const laguia = await guia.findAll({ where: { pedidoID: id } });
+    if (laguia.length > 0) {
+      const guiaUpdate = await pedido.update(bodyGuia, {
+        where: { pedidoID: id },
+      });
+    } else {
+      if (req.body.estadopedido != "Pedido recibido") {
+        guia.create(bodyGuia);
+      }
+    }
+    const laFactura = await factura.update(bodyFactura, {
+      where: { pedidoID: id }
+    });
+
     const pedidoAll = await pedido.update(body, { where: { id } });
-    if (pedidoAll) {
+    if (pedidoAll && laguia && laFactura) {
       return res.status(201).json({
         msg: "El pedido fue actualizado exitosamente",
         status: pedidoAll,
@@ -125,12 +169,10 @@ const pedidoDelete = async (req, res = response) => {
   }
 };
 
-
-
 module.exports = {
   pedidoPost,
   pedidoGet,
   pedidoPut,
   pedidoDelete,
-  pedidoGetid
+  pedidoGetid,
 };
