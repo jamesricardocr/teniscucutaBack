@@ -3,6 +3,7 @@ const pedido = require("../models/pedido");
 const factura = require("../models/factura");
 const guia = require("../models/guia");
 const remitente = require("../models/remitente");
+const producto = require("../models/producto");
 
 const uniqid = require("uniqid");
 let theRemitente;
@@ -132,8 +133,35 @@ const pedidoPut = async (req, res = response) => {
       }
     }
     const laFactura = await factura.update(bodyFactura, {
-      where: { pedidoID: id }
+      where: { pedidoID: id },
     });
+
+    if (
+      req.body.estadopedido != "Pedido recibido" &&
+      req.body.estadopedido != "Pago aprobado"
+    ) {
+      const productosAactualizar = req.body.productospedido;
+      let newArrayStock;
+      productosAactualizar.map(async (p) => {
+        const productoAll = await producto.findAll({ where: { id: p.id } });
+        const productoSplit = await productoAll[0].stock.split(",");
+        productoSplit.map((array) => {
+          const temporal = array.split(":");
+          if (temporal[0] === p.talla) {
+            const oldStock = `${temporal[0]}:${temporal[1]}`;
+            const cantidadModificada = Number(temporal[1]) - Number(p.cantidad);
+            temporal[1] = cantidadModificada.toString();
+            const newStock = `${temporal[0]}:${temporal[1]}`;
+            newArrayStock = productoAll[0].stock.replace(oldStock, newStock);
+          }
+        });
+        console.log(newArrayStock, typeof newArrayStock);
+        const productoChangeStock = await producto.update(
+          { stock: newArrayStock },
+          { where: { id: p.id } }
+        );
+      });
+    }
 
     const pedidoAll = await pedido.update(body, { where: { id } });
     if (pedidoAll && laguia && laFactura) {
