@@ -4,7 +4,7 @@ const producto = require("../models/producto");
 const productoPost = async (req, res = response) => {
   try {
     req.body.editadopor = req.user.email;
-    req.body.estadoproducto = "activo";
+    req.body.estadoproducto = "Activo";
     req.body.imagen = req.file.filename;
     const body = req.body;
     producto.create(body);
@@ -18,8 +18,6 @@ const productoPost = async (req, res = response) => {
   }
 };
 
-
-
 const productoGet = async (req, res = response) => {
   const productoAll = await producto.findAll();
 
@@ -32,7 +30,6 @@ const productoGet = async (req, res = response) => {
 const productoPut = async (req, res = response) => {
   const id = req.params.id;
   const body = req.body;
-  // console.log(req.params);
 
   if (req.file) {
     req.body.imagen = req.file.filename;
@@ -55,11 +52,34 @@ const productoPut = async (req, res = response) => {
   }
 };
 
+// const productoPutDisable = async (req, res = response) => {
+//   const id = req.params.id;
+//   const body = req.body;
+//   console.log(req.params);
+//   console.log(body);
+
+//   try {
+//     const productoChangeStock = await producto.update(
+//       { estadoproducto: body },
+//       { where: { id } }
+//     );
+//     if (productoChangeStock) {
+//       return res.status(201).json({
+//         msg: "El producto fue actualizado exitosamente",
+//       });
+//     }
+//   } catch (error) {
+//     return res.status(201).json({
+//       msg: "Hubo un problema al actualizar el producto",
+//     });
+//   }
+// };
+
 const productoActivate = async (req, res = response) => {
   const id = req.params.id;
   try {
     const productoAll = await producto.update(
-      { estadoproducto: "activo" },
+      { estadoproducto: "Activo" },
       { where: { id } }
     );
     return res.status(200).json({
@@ -76,7 +96,7 @@ const productoDelete = async (req, res = response) => {
   const id = req.params.id;
   try {
     const productoAll = await producto.update(
-      { estadoproducto: "desactivado" },
+      { estadoproducto: "Desactivado" },
       { where: { id } }
     );
     return res.status(200).json({
@@ -86,7 +106,6 @@ const productoDelete = async (req, res = response) => {
   } catch (error) {
     return res.status(201).json({
       msg: "Hubo un problema al borrar el producto",
-      status: productoAll,
     });
   }
 };
@@ -97,5 +116,4 @@ module.exports = {
   productoPut,
   productoDelete,
   productoActivate,
-  // productoPostImage
 };
