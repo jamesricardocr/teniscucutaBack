@@ -40,6 +40,12 @@ const pedido =  db.define("pedido", {
   infopago: {
     type: DataTypes.STRING,
   },
+  numeroguia: {
+    type: DataTypes.STRING,
+  },
+  empresaguia: {
+    type: DataTypes.STRING,
+  },
   productospedido: {
     type: DataTypes.JSON,
   },

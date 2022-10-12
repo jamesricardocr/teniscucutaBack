@@ -21,10 +21,17 @@ const productoPost = async (req, res = response) => {
 const productoGet = async (req, res = response) => {
   const productoAll = await producto.findAll();
 
-  res.json({
-    msg: "mostrando los producto desde el get",
-    productoAll,
-  });
+
+  try {
+    res.json({
+      msg: "mostrando los producto desde el get",
+      productoAll,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      msg: "Hubo un problema",
+    });
+  }
 };
 
 const productoPut = async (req, res = response) => {

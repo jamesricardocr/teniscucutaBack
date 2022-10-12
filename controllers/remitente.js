@@ -18,18 +18,23 @@ const remitentePost = async (req, res = response) => {
 };
 
 const remitenteGet = async (req, res = response) => {
-  const remitenteAll = await remitente.findAll();
 
-  res.json({
-    msg: "mostrando los remitente desde el get",
-    remitenteAll,
-  });
+  try {
+    const remitenteAll = await remitente.findAll();
+    res.json({
+      msg: "mostrando los remitente desde el get",
+      remitenteAll,
+    });
+  } catch (error) {
+    return res.status(201).json({
+      msg: "Hubo un problema al obtener el remitente",
+    });
+  }
 };
 
 const remitentePut = async (req, res = response) => {
   const id = req.params.id;
   const body = req.body;
-  // console.log(req.params);
 
   try {
     const remitenteAll = await remitente.update(body, { where: { id } });

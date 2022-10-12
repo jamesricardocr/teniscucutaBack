@@ -18,7 +18,7 @@ const getRemitente = async () => {
 getRemitente();
 
 const pedidoPost = async (req, res = response) => {
-  const uniqueID = uniqid();
+  const uniqueID = uniqid.time();
 
   req.body.editadopor = "cliente";
   req.body.estadopedido = "Pedido recibido";
@@ -83,11 +83,21 @@ const pedidoGet = async (req, res = response) => {
 const pedidoGetid = async (req, res = response) => {
   const id = req.params.id;
 
-  const pedidoAll = await pedido.findAll({ where: { id } });
-  res.json({
-    estado: pedidoAll[0].estadopedido,
-    id: pedidoAll[0].id,
-  });
+  try {
+    const pedidoAll = await pedido.findAll({ where: { id } });
+    console.log(pedidoAll);
+    res.json({
+      estado: pedidoAll[0].estadopedido,
+      id: pedidoAll[0].id,
+      empresa: pedidoAll[0].empresaguia,
+      guia: pedidoAll[0].numeroguia
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error: "El numero de pedido no existe",
+    });
+  }
+
 };
 
 const pedidoPut = async (req, res = response) => {
