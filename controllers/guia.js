@@ -3,11 +3,18 @@ const guia = require("../models/guia")
 
 
 const guiasGet = async (req, res = response) => {
-  const guiaAll = await guia.findAll();
-  res.json({
-    msg: "mostrando las guias desde el get",
-    guiaAll,
-  });
+
+  try {
+    const guiaAll = await guia.findAll();
+    res.json({
+      msg: "mostrando las guias desde el get",
+      guiaAll,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      msg: "Hubo un problema..",
+    });
+  }
 };
 
 const guiasGetID = async (req, res = response) => {

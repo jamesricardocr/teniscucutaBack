@@ -15,7 +15,6 @@ const loginPost = async (req, res = response) => {
     }
 
     if (user.password != password) {
-      console.log("la contraseña es invalida");
       return res.status(400).json({
         msg: "la contraseña es invalida",
       });

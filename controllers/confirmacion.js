@@ -2,8 +2,7 @@ const { response } = require("express");
 const confirmacion = require("../models/confirmacion");
 
 const confirmacionPost = async (req, res = response) => {
-  console.log(req.body);
-  const body = req.body
+  const body = req.body;
   try {
     confirmacion.create(body);
     return res.status(201).json({
@@ -18,12 +17,17 @@ const confirmacionPost = async (req, res = response) => {
 };
 
 const confirmacionGet = async (req, res = response) => {
-  const confirmacionAll = await confirmacion.findAll();
-
-  res.json({
-    msg: "mostrando los confirmacion desde el get",
-    confirmacionAll,
-  });
+  try {
+    const confirmacionAll = await confirmacion.findAll();
+    res.json({
+      msg: "mostrando los confirmacion desde el get",
+      confirmacionAll,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      msg: "Hubo un problema",
+    });
+  }
 };
 
 const confirmacionPut = async (req, res = response) => {
@@ -44,8 +48,6 @@ const confirmacionPut = async (req, res = response) => {
     });
   }
 };
-
-
 
 module.exports = {
   confirmacionPost,
