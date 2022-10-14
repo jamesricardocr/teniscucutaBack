@@ -3,10 +3,10 @@ const db = require("../db/connection");
 
 const pedido =  db.define("pedido", {
 
-  id: {
-    type: DataTypes.STRING,
-    primaryKey: true
-  },
+  // id: {
+  //   type: DataTypes.STRING,
+  //   primaryKey: true
+  // },
   nombre: {
     type: DataTypes.STRING,
   },
@@ -50,6 +50,9 @@ const pedido =  db.define("pedido", {
     type: DataTypes.JSON,
   },
   editadopor: {
+    type: DataTypes.STRING,
+  },
+  iddos: {
     type: DataTypes.STRING,
   },
 
