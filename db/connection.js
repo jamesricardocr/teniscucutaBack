@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize");
+const mysql = require("mysql2");
 
 const db = new Sequelize(
   "piwdzivo_tenisCucuta",
@@ -13,7 +14,9 @@ const db = new Sequelize(
     // timezone: 'America/Bogota',
     timezone: "-05:00",
     dialectOptions: {
-      useUTC: false, // for reading from database
+      // dateStrings: true,
+      typeCast: true,
+      timezone: "+8:00",
     },
     // dialectOptions: { useUTC: false },
     // timezone: "+05:30",
@@ -38,7 +41,5 @@ const db = new Sequelize(
 //     },
 //   }
 // );
-
-
 
 module.exports = db;
