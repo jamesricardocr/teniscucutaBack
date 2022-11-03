@@ -8,6 +8,9 @@ const producto =  db.define("producto", {
   precio: {
     type: DataTypes.STRING,
   },
+  preciointerno: {
+    type: DataTypes.STRING,
+  },
   categorias: {
     type: DataTypes.STRING,
   },
@@ -29,6 +32,6 @@ const producto =  db.define("producto", {
 
 });
 
-producto.sync()
-
+// producto.sync()
+producto.sync({ alter: true })
 module.exports = producto;

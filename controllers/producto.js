@@ -2,11 +2,13 @@ const { response } = require("express");
 const producto = require("../models/producto");
 
 const productoPost = async (req, res = response) => {
+  console.log(req.body);
   try {
     req.body.editadopor = req.user.email;
     req.body.estadoproducto = "Activo";
     req.body.imagen = req.file.filename;
     const body = req.body;
+    console.log(body);
     producto.create(body);
     return res.status(201).json({
       msg: "producto creado exitosamente",
@@ -37,7 +39,7 @@ const productoGet = async (req, res = response) => {
 const productoPut = async (req, res = response) => {
   const id = req.params.id;
   const body = req.body;
-
+ 
   if (req.file) {
     req.body.imagen = req.file.filename;
   } else {

@@ -20,6 +20,7 @@ getRemitente();
 
 const pedidoPost = async (req, res = response) => {
   // const uniqueID = uniqid();
+  console.log(req.body);
   req.body.editadopor = "cliente";
   req.body.estadopedido = "Pedido recibido";
   req.body.infopago = "Pendiente";
@@ -27,6 +28,7 @@ const pedidoPost = async (req, res = response) => {
   // req.body.iddos = uniqueID;
 
   const body = req.body;
+  console.log(body);
   try {
     let p = await pedido.create(body);
     return res.status(201).json({
@@ -77,7 +79,7 @@ const pedidoPut = async (req, res = response) => {
   const id = req.params.id;
   req.body.editadopor = req.user.email;
   const body = req.body;
-
+  console.log(body);
   // const bodyFactura = {
   //   nombrecliente: req.body.nombre,
   //   cedula: req.body.cedula,

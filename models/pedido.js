@@ -34,6 +34,9 @@ const pedido =  db.define("pedido", {
   total: {
     type: DataTypes.STRING,
   },
+  totalinterno: {
+    type: DataTypes.STRING,
+  },
   tipoenvio: {
     type: DataTypes.STRING,
   },
@@ -58,6 +61,7 @@ const pedido =  db.define("pedido", {
 
 });
 
-pedido.sync()
+// pedido.sync()
+pedido.sync({ alter: true })
 
 module.exports = pedido;
