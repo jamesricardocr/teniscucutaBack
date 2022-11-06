@@ -46,7 +46,7 @@ class Server {
 
     // this.app.use('/files', express.static('public'));
     this.app.use('/files', express.static('files'));
-
+    this.app.use(express.urlencoded({extended: true}))
   }
 
   routes() {

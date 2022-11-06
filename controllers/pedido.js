@@ -33,7 +33,7 @@ const pedidoPost = async (req, res = response) => {
     let p = await pedido.create(body);
     return res.status(201).json({
       msg: "pedido creado exitosamente",
-      pedido:  p.id,
+      pedido: p.id,
       total: p.total
     });
   } catch (error) {
@@ -76,22 +76,10 @@ const pedidoGetid = async (req, res = response) => {
 };
 
 const pedidoPut = async (req, res = response) => {
+  
   const id = req.params.id;
   req.body.editadopor = req.user.email;
-  const body = req.body;
-  console.log(body);
-  // const bodyFactura = {
-  //   nombrecliente: req.body.nombre,
-  //   cedula: req.body.cedula,
-  //   telefono: req.body.telefono,
-  //   email: req.body.email,
-  //   departamento: req.body.departamento,
-  //   ciudad: req.body.ciudad,
-  //   direccion: req.body.direccion,
-  //   total: req.body.total,
-  //   estado: req.body.estadopedido,
-  //   pedidoID: req.body.id,
-  // };
+    const body = req.body;
 
   const bodyGuia = {
     destinatarionombre: req.body.nombre,
@@ -117,9 +105,6 @@ const pedidoPut = async (req, res = response) => {
         guia.create(bodyGuia);
       }
     }
-    // const laFactura = await factura.update(bodyFactura, {
-    //   where: { pedidoID: id },
-    // });
 
     if (
       req.body.estadopedido != "Pedido recibido" &&
@@ -157,7 +142,7 @@ const pedidoPut = async (req, res = response) => {
     }
   } catch (error) {
     return res.status(201).json({
-      msg: "Hubo un problema al actualizar el pedido",
+      msg: "Hubo un problema al actualizar el pedido" + error,
     });
   }
 };
@@ -182,10 +167,30 @@ const pedidoDelete = async (req, res = response) => {
   }
 };
 
+const pedidoADguia = async (req, res = response) => {
+  const id = req.params.id;
+  console.log(req.file.filename);
+
+  try {
+    const pedidoAll = await pedido.update(
+      { imagen: req.file.filename },
+      { where: { id } }
+    );
+    return res.status(200).json({
+      msg: "la guia fue subida con exito",
+    });
+  } catch (error) {
+    return res.status(201).json({
+      msg: "Hubo un problema al subir la guia el pedido",
+    });
+  }
+};
+
 module.exports = {
   pedidoPost,
   pedidoGet,
   pedidoPut,
   pedidoDelete,
   pedidoGetid,
+  pedidoADguia
 };

@@ -49,6 +49,9 @@ const pedido =  db.define("pedido", {
   empresaguia: {
     type: DataTypes.STRING,
   },
+  imagen: {
+    type: DataTypes.STRING,
+  },
   productospedido: {
     type: DataTypes.JSON,
   },
