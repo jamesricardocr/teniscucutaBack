@@ -67,6 +67,7 @@ const pedidoGetid = async (req, res = response) => {
       id: pedidoAll[0].id,
       empresa: pedidoAll[0].empresaguia,
       guia: pedidoAll[0].numeroguia,
+      imagen: pedidoAll[0].imagen
     });
   } catch (error) {
     return res.status(400).json({
@@ -76,10 +77,10 @@ const pedidoGetid = async (req, res = response) => {
 };
 
 const pedidoPut = async (req, res = response) => {
-  
+
   const id = req.params.id;
   req.body.editadopor = req.user.email;
-    const body = req.body;
+  const body = req.body;
 
   const bodyGuia = {
     destinatarionombre: req.body.nombre,
