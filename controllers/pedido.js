@@ -109,7 +109,9 @@ const pedidoPut = async (req, res = response) => {
 
     if (
       req.body.estadopedido != "Pedido recibido" &&
-      req.body.estadopedido != "Pago aprobado"
+      req.body.estadopedido != "Pago aprobado" &&
+      req.body.estadopedido != "Preparando pedido" &&
+      req.body.estadopedido != "Desactivado"
     ) {
       const productosAactualizar = req.body.productospedido;
       let newArrayStock;
@@ -150,7 +152,7 @@ const pedidoPut = async (req, res = response) => {
 
 const pedidoDelete = async (req, res = response) => {
   const id = req.params.id;
-
+  console.log('desactivando el pedido...');
   try {
     const pedidoAll = await pedido.update(
       { estadopedido: "desactivado" },
@@ -163,7 +165,6 @@ const pedidoDelete = async (req, res = response) => {
   } catch (error) {
     return res.status(201).json({
       msg: "Hubo un problema al borrar el pedido",
-      status: pedidoAll,
     });
   }
 };
