@@ -35,7 +35,7 @@ const guia =  db.define("guia", {
 
 });
 
-guia.sync()
+guia.sync({ alter: true })
 
 module.exports = guia;
 

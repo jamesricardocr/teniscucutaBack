@@ -35,7 +35,7 @@ const factura =  db.define("factura", {
 
 });
 
-factura.sync()
+factura.sync({ alter: true })
 
 module.exports = factura;
 

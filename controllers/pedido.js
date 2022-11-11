@@ -20,7 +20,6 @@ getRemitente();
 
 const pedidoPost = async (req, res = response) => {
   // const uniqueID = uniqid();
-  console.log(req.body);
   req.body.editadopor = "cliente";
   req.body.estadopedido = "Pedido recibido";
   req.body.infopago = "Pendiente";
@@ -28,7 +27,6 @@ const pedidoPost = async (req, res = response) => {
   // req.body.iddos = uniqueID;
 
   const body = req.body;
-  console.log(body);
   try {
     let p = await pedido.create(body);
     return res.status(201).json({
@@ -61,7 +59,6 @@ const pedidoGetid = async (req, res = response) => {
 
   try {
     const pedidoAll = await pedido.findAll({ where: { id } });
-    console.log(pedidoAll);
     res.json({
       estado: pedidoAll[0].estadopedido,
       id: pedidoAll[0].id,
@@ -77,7 +74,6 @@ const pedidoGetid = async (req, res = response) => {
 };
 
 const pedidoPut = async (req, res = response) => {
-
   const id = req.params.id;
   req.body.editadopor = req.user.email;
   const body = req.body;
@@ -97,15 +93,25 @@ const pedidoPut = async (req, res = response) => {
 
   try {
     const laguia = await guia.findAll({ where: { pedidoID: id } });
-    if (laguia.length > 0) {
-      const guiaUpdate = await pedido.update(bodyGuia, {
-        where: { pedidoID: id },
-      });
-    } else {
-      if (req.body.estadopedido != "Pedido recibido") {
+    if (req.body.estadopedido === 'Pago aprobado') {
+      if (laguia.length > 0) {
+        const guiaUpdate = await guia.update(bodyGuia, {
+          where: { pedidoID: id },
+        });
+      } else {
         guia.create(bodyGuia);
       }
     }
+    // if (laguia.length > 0) {
+    //   const guiaUpdate = await guia.update(bodyGuia, {
+    //     where: { pedidoID: id },
+    //   });
+    // } else {
+    //   if (req.body.estadopedido != "Pedido recibido" && req.body.estadopedido != "Desactivado"
+    //   ) {
+    //     guia.create(bodyGuia);
+    //   }
+    // }
 
     if (
       req.body.estadopedido != "Pedido recibido" &&
@@ -128,7 +134,6 @@ const pedidoPut = async (req, res = response) => {
             newArrayStock = productoAll[0].stock.replace(oldStock, newStock);
           }
         });
-        console.log(newArrayStock, typeof newArrayStock);
         const productoChangeStock = await producto.update(
           { stock: newArrayStock },
           { where: { id: p.id } }
@@ -152,7 +157,6 @@ const pedidoPut = async (req, res = response) => {
 
 const pedidoDelete = async (req, res = response) => {
   const id = req.params.id;
-  console.log('desactivando el pedido...');
   try {
     const pedidoAll = await pedido.update(
       { estadopedido: "desactivado" },
@@ -171,7 +175,6 @@ const pedidoDelete = async (req, res = response) => {
 
 const pedidoADguia = async (req, res = response) => {
   const id = req.params.id;
-  console.log(req.file.filename);
 
   try {
     const pedidoAll = await pedido.update(
