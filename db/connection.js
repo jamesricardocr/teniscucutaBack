@@ -1,27 +1,27 @@
 const { Sequelize } = require("sequelize");
 const mysql = require("mysql2");
 
-const db = new Sequelize(
-  "piwdzivo_tenisCucuta",
-  "piwdzivo_ricardoCanas",
-  "controlremoto11",
-  {
-    host: "216.246.112.154",
-    dialect: "mysql",
-    // logging: false
-    // esto resuelve el problema del nombre de las tablas
-    define: { freezeTableName: true },
-    // timezone: 'America/Bogota',
-    timezone: "-05:00",
-    dialectOptions: {
-      // dateStrings: true,
-      typeCast: true,
-      timezone: "+8:00",
-    },
-    // dialectOptions: { useUTC: false },
-    // timezone: "+05:30",
-  }
-);
+// const db = new Sequelize(
+//   "piwdzivo_tenisCucuta",
+//   "piwdzivo_ricardoCanas",
+//   "controlremoto11",
+//   {
+//     host: "216.246.112.154",
+//     dialect: "mysql",
+//     // logging: false
+//     // esto resuelve el problema del nombre de las tablas
+//     define: { freezeTableName: true },
+//     // timezone: 'America/Bogota',
+//     timezone: "-05:00",
+//     dialectOptions: {
+//       // dateStrings: true,
+//       typeCast: true,
+//       timezone: "+8:00",
+//     },
+//     // dialectOptions: { useUTC: false },
+//     // timezone: "+05:30",
+//   }
+// );
 
 // const db = new Sequelize(
 //   "piwdzivo_test",
@@ -42,5 +42,27 @@ const db = new Sequelize(
 //     },
 //   }
 // );
+
+const db = new Sequelize(
+  "teniscucutalocal",
+  "root",
+  "root",
+  {
+    host: "localhost",
+    dialect: "mysql",
+    // logging: false
+    // esto resuelve el problema del nombre de las tablas
+    define: { freezeTableName: true },
+    // timezone: 'America/Bogota',
+    timezone: "-05:00",
+    dialectOptions: {
+      // dateStrings: true,
+      typeCast: true,
+      timezone: "+8:00",
+    },
+    // dialectOptions: { useUTC: false },
+    // timezone: "+05:30",
+  }
+);
 
 module.exports = db;

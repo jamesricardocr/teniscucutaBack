@@ -116,7 +116,8 @@ const pedidoPut = async (req, res = response) => {
     if (
       req.body.estadopedido != "Pedido recibido" &&
       req.body.estadopedido != "Pago aprobado" &&
-      req.body.estadopedido != "Preparando pedido" &&
+      req.body.estadopedido != "Pedido enviado" &&
+      req.body.estadopedido != "Pedido Agendado" &&
       req.body.estadopedido != "Desactivado"
     ) {
       const productosAactualizar = req.body.productospedido;

@@ -18,6 +18,7 @@ class Server {
     this.remitente = "/remitente";
     this.confirmacion = "/confirmacion";
     this.guia = "/guia";
+    this.popup = "/popup";
     // modelos
     this.dbConnection();
     // middlewares, son los mediadores
@@ -58,6 +59,7 @@ class Server {
     this.app.use(this.remitente, require("../routes/remitente.routes"));
     this.app.use(this.confirmacion, require("../routes/confirmacion.routes"));
     this.app.use(this.guia, require("../routes/guia.routes"));
+    this.app.use(this.popup, require("../routes/popup.routes"));
   }
 
   listen() {

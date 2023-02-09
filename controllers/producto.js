@@ -61,28 +61,6 @@ const productoPut = async (req, res = response) => {
   }
 };
 
-// const productoPutDisable = async (req, res = response) => {
-//   const id = req.params.id;
-//   const body = req.body;
-//   console.log(req.params);
-//   console.log(body);
-
-//   try {
-//     const productoChangeStock = await producto.update(
-//       { estadoproducto: body },
-//       { where: { id } }
-//     );
-//     if (productoChangeStock) {
-//       return res.status(201).json({
-//         msg: "El producto fue actualizado exitosamente",
-//       });
-//     }
-//   } catch (error) {
-//     return res.status(201).json({
-//       msg: "Hubo un problema al actualizar el producto",
-//     });
-//   }
-// };
 
 const productoActivate = async (req, res = response) => {
   const id = req.params.id;
